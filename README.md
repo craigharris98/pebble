@@ -1,8 +1,6 @@
 Azure DevOPS pipeline / Terraform to publish a simple python application, returning the request information back to the sender.
 
-
 Terraform modules commented in the files, in a larger project I would have considered seperating these out from main and using depends_on to ensure correct order of deployment.
-
 
 References and issues:
 
@@ -36,7 +34,10 @@ Unfortunately I didnt have access to a windows machine over the weekend as I sho
 running .NET binaries is always going to be painful in Linux)
 
 (When running in CLI export is fine, if I were to port this into systemD or Docker this would be an environment var).
+
+```
 export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+```
 
 https://github.com/dotnet/core/issues/2186
 
@@ -49,6 +50,7 @@ If we had, we would need to make sure the build machine has access to the requir
 
 Once running and listening it was able to pick up the job:
 
+```
 Enter work folder (press enter for _work) > 
 2023-02-05 23:34:15Z: Settings Saved.
 [craig@fedora agent]$ ./run.sh 
@@ -61,7 +63,9 @@ Connecting to the server.
 2023-02-05 23:51:34Z: Job Run any script on any host completed with result: Succeeded
 2023-02-06 00:13:17Z: Running job: Run any script on any host
 2023-02-06 00:13:43Z: Job Run any script on any host completed with result: Succeeded
-
+```
 
 Output from curl:
+```
 {"method": "GET", "url": "https://python-dump.azurewebsites.net/api/http-trigger-dump-request?", "headers": {"x-arr-log-id": "8be174f1-9228-4b7d-ada2-e8ff5e7014b1", "client-ip": "10.0.0.5:30826", "x-arr-ssl": "2048|256|CN=Microsoft Azure TLS Issuing CA 05, O=Microsoft Corporation, C=US|CN=*.azurewebsites.net, O=Microsoft Corporation, L=Redmond, S=WA, C=US", "x-forwarded-proto": "https", "accept-encoding": "gzip, deflate, br", "sec-fetch-mode": "navigate", "max-forwards": "9", "disguised-host": "python-dump.azurewebsites.net", "x-forwarded-for": "81.99.34.252:40354", "x-waws-unencoded-url": "/api/http-trigger-dump-request?", "was-default-hostname": "python-dump.azurewebsites.net", "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8", "x-original-url": "/api/http-trigger-dump-request?", "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0", "accept-language": "en-GB,en;q=0.5", "x-site-deployment-id": "python-dump", "sec-fetch-user": "?1", "connection": "keep-alive", "sec-fetch-dest": "document", "sec-fetch-site": "none", "x-appservice-proto": "https", "host": "python-dump.azurewebsites.net", "x-forwarded-tlsversion": "1.2"}, "params": {}, "get_body": ""}
+```
