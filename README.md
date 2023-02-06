@@ -1,14 +1,8 @@
 Azure DevOPS pipeline / Terraform to publish a simple python application, returning the request information back to the sender.
 
-For a larger terraform project I would have seperated these out from main.tf, 
-i.e resource_group.tf and then have seperate files for each application such as public_functionA.tf and public_functionB.tf.
-These would then attach via the name the same as they do before, azurerm_resource_group.pebble_dev_01.name 
-Addding a "depends_on" tag to make sure the resource group is there before we do the next steps.
 
-For ease I put all the options in variables.tf - Again in a larger application I would have broken these down into variables for each application.
-Rather than just the generic "storage" It would be function_app_A_Storage
+Terraform modules commented in the files, in a larger project I would have considered seperating these out from main and using depends_on to ensure correct order of deployment.
 
-We'd probably have terraform and the actual python code in a seperate repo in a live environment, pipeline looks at main which means we'll trigger a rebuild of the application when we change terraform when we may not need to.
 
 References and issues:
 
@@ -25,21 +19,29 @@ Terraform modules used are commented within the .tf files where relevant.
 
 Issues:
 
-Ran into a problem triggering the pipeline either by commit into my repo branch or manually in the DevOPS web portal, as Microsoft have banned the use of "parallel jobs" until you fill out a form for their approval, making testing the IAC rather tricky..
+Ran into a problem triggering the pipeline either by commit into my repo branch or manually in the DevOPS web portal, 
+as Microsoft have banned the use of "parallel jobs" until you fill out a form for their approval, making testing the IAC rather tricky..
 
-Linux agent - workaround for this, I'm running an agent on my home machine for now and added that to the default agent group as there is no limit on self hosting an agent.
+Linux agent - workaround for this. 
+
+I'm running an agent on my home machine for now and added that to the default agent group as there is no limit on self hosting an agent.
 In a production environment we would be authorised to use parallel jobs.
 
 https://learn.microsoft.com/en-us/azure/devops/pipelines/licensing/concurrent-jobs?view=azure-devops&tabs=ms-hosted
+
 https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/v2-linux?view=azure-devops#check-prerequisites
 
-(Agent is rather broken by default as it uses an old version of openSSL and the .net binary is misconfigured, unfortunately I didnt have access to a windows machine over the weekend as I should think the windows port is much more stable, running .NET binaries is always going to be painful in Linux)
+(Agent is rather broken by default as it uses an old version of openSSL and the .net binary is misconfigured.
+Unfortunately I didnt have access to a windows machine over the weekend as I should think the windows port is much more stable, 
+running .NET binaries is always going to be painful in Linux)
 
 (When running in CLI export is fine, if I were to port this into systemD or Docker this would be an environment var).
 export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
 https://github.com/dotnet/core/issues/2186
 
 Linux agent also requires openSSL 1.1 (EOL in 7 months, Microsoft!).
+
 https://fedora.pkgs.org/35/fedora-x86_64/openssl-1.1.1l-2.fc35.x86_64.rpm.html
 
 Fortunately I didnt need to port a specific Python version into my agent when it ran the pipeline as this is a simple app.
