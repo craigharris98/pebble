@@ -1,0 +1,32 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+jobs:
+- job: job1
+  displayName: Run any script on any host
+
+  pool:
+    name: Default
+    demands:
+      - agent.name -equals fedora
+  steps:
+  
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/http-trigger-dump-request'
+      includeRootFolder: true
+      archiveType: 'zip'
+      archiveFile: '$(System.DefaultWorkingDirectory)/http-trigger-dump-request.zip'
+      replaceExistingArchive: true
+  - task: AzureFunctionApp@1
+    inputs:
+      azureSubscription: 'Azure subscription 1 (aed3d73e-dec1-408e-abb9-b5787d0d7284)'
+      appType: 'functionAppLinux'
+      appName: 'python-dump'
+      deployToSlotOrASE: true
+      resourceGroupName: 'pebbledevrg01'
+      slotName: 'production'
+      package: '$(System.DefaultWorkingDirectory)/http-trigger-dump-request.zip'
