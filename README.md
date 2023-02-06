@@ -18,7 +18,7 @@ Terraform modules used are commented within the .tf files where relevant.
 Issues:
 
 Ran into a problem triggering the pipeline either by commit into my repo branch or manually in the DevOPS web portal, 
-as Microsoft have banned the use of "parallel jobs" until you fill out a form for their approval, making testing the IAC rather tricky..
+as Microsoft have banned the use of paralell jobs until you fill out a form for their approval, making testing the IAC rather tricky..
 
 Linux agent - workaround for this, very similar to a Jenkins build-agent
 
