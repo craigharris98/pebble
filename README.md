@@ -20,7 +20,7 @@ Issues:
 Ran into a problem triggering the pipeline either by commit into my repo branch or manually in the DevOPS web portal, 
 as Microsoft have banned the use of "parallel jobs" until you fill out a form for their approval, making testing the IAC rather tricky..
 
-Linux agent - workaround for this. 
+Linux agent - workaround for this, very similar to a Jenkins build-agent
 
 I'm running an agent on my home machine for now and added that to the default agent group as there is no limit on self hosting an agent.
 In a production environment we would be authorised to use parallel jobs.
@@ -30,8 +30,7 @@ https://learn.microsoft.com/en-us/azure/devops/pipelines/licensing/concurrent-jo
 https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/v2-linux?view=azure-devops#check-prerequisites
 
 (Agent is rather broken by default as it uses an old version of openSSL and the .net binary is misconfigured.
-Unfortunately I didnt have access to a windows machine over the weekend as I should think the windows port is much more stable, 
-running .NET binaries is always going to be painful in Linux)
+running .NET binaries is always going to be painful in Linux, could have spun up a windows VM if it had completely failed).
 
 (When running in CLI export is fine, if I were to port this into systemD or Docker this would be an environment var).
 
